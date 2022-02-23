@@ -27,14 +27,17 @@ class LoamAuthCheck
             return GlobalsHelper\putsResponse(false, "Invalid Token Provided", [], 400);
         }
 
-        $sysData->created_at;
-
         $lastTime = new \DateTime(now());
         $diffTime = $lastTime->diff(new \DateTime($sysData->created_at));
 
         if ($diffTime->i >  config('commonconfig.timeoutInMins')) {
             return GlobalsHelper\putsResponse(false, "Token TimeOut", [], 400);
         }
+
+        $sysData = \App\Models\User::where(['mobile_no' => $sysData->mobile_no, 'name' => $sysData->name])
+            ->first();
+
+        $request->merge(['user_id' => $sysData->id]);
 
         return $next($request);
     }

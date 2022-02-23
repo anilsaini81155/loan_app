@@ -20,7 +20,6 @@ class MainController
         Services\LoanService $loanService,
         Services\TokenService $tokenService
     ) {
-
         $this->repyamentService = $repyamentService;
         $this->loanService = $loanService;
         $this->tokenService = $tokenService;
@@ -28,43 +27,47 @@ class MainController
 
 
     /**
-     *    Below function calculates the 
+     *    Below function generates the token based on the mobile no and name with a validity of 15 mins.
      *    @param $request
      */
 
     public function firstStep(Requests\FirstStepRequest $a)
     {
-
-        //insert the above data and generate a token that will be valid for 15 mins ..
-
         $returnData = $this->tokenService->process($a);
         GlobalsHelper\putsResponse($returnData['status'], $returnData['msg'], $returnData['data'], $returnData['code']);
     }
 
     /**
-     *    Below function calculates the 
+     *    Below function created a loan and generated the EMI Schedule
      *    @param $request
      */
 
     public function secondStep(Requests\SecondStepRequest $a)
     {
-        //store the data in the table.
-        //have one migration file will create the tables ..
-        $returnData = $this->repyamentService->process($a);
-
+        $returnData = $this->loanService->process($a);
         GlobalsHelper\putsResponse($returnData['status'], $returnData['msg'], $returnData['data'], $returnData['code']);
     }
 
     /**
-     *    Below function calculates the 
+     *    Below function helps to pay the EMI
      *    @param $request
      */
 
-    public function repayamentSchedule()
+    public function processEmi(Requests\PayEmiRequest $a)
     {
-        //weekly repaymentSchedule..
-        $returnData = $this->repyamentService->process();
+        $returnData = $this->repyamentService->payEmi($a->emi_id, $a->emi_amount);
+        GlobalsHelper\putsResponse($returnData['status'], $returnData['msg'], $returnData['data'], $returnData['code']);
+    }
 
+
+    /**
+     *    Below function gives the EMI Schedule
+     *    @param $request
+     */
+
+    public function repayamentSchedule(Requests\GetEmiScheduleRequest $a)
+    {
+        $returnData = $this->repyamentService->getEmiSchedule($a->loan_id);
         GlobalsHelper\putsResponse($returnData['status'], $returnData['msg'], $returnData['data'], $returnData['code']);
     }
 }

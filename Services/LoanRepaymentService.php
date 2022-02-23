@@ -6,6 +6,7 @@ use App\Helpers\GlobalsHelper;
 use Repository\LoanRepository;
 use Repository\RepaymentRepository;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection as Collect;
 use DB;
 use Log;
 use Config;
@@ -24,35 +25,7 @@ class LoanRepaymentService
         $this->loanRepaymentRepo = $loanRepaymentRepo;
     }
 
-    public function process(Request $a)
-    {
-
-        DB::beginTransaction();
-
-        try {
-
-            $insertData = [
-                'loan_amount' => $a->loan_amount,
-                'loan_tenure' => $a->loan_tenure,
-                'created_at' => now()
-            ];
-
-            //repaymemt section can only pay EMIs one by one ..
-
-            $returnData = $this->loanRepo->insert($insertData);
-
-            DB::commit();
-
-            GlobalsHelper\funcReturnsData(true, "successful", ['id' => $returnData], 200);
-        } catch (\Exception $ex) {
-
-            DB::rollback();
-            Log::info($ex);
-            GlobalsHelper\funcReturnsData(false, "error", ['error' => $ex->getMessage()], 400);
-        }
-    }
-
-    public function payEmi(int $emiId, float $amount)
+    public function payEmi(int $emiId, float $amount): Collect
     {
         DB::beginTransaction();
 
@@ -61,15 +34,15 @@ class LoanRepaymentService
             $emiRecord = $this->loanRepaymentRepo->select($emiId);
 
             if ($emiRecord->isEmpty()) {
-                GlobalsHelper\funcReturnsData(false, "EMI Not found", [], 400);
+                return  GlobalsHelper\funcReturnsData(false, "EMI Not found", [], 400);
             }
 
             if ($emiRecord->emi_amount !== $amount) {
-                GlobalsHelper\funcReturnsData(false, "EMI Amount Not Matched || Partial EMI not allowed", [], 400);
+                return  GlobalsHelper\funcReturnsData(false, "EMI Amount Not Matched || Partial EMI not allowed", [], 400);
             }
 
             if ($emiRecord->status == config('commonconfig.emi_status.Paid')) {
-                GlobalsHelper\funcReturnsData(false, "EMI Already Paid", [], 400);
+                return  GlobalsHelper\funcReturnsData(false, "EMI Already Paid", [], 400);
             }
 
             $emiUpdateCount =  $this->loanRepaymentRepo->update(['status' => config('commonconfig.emi_status.Paid')], $emiId);
@@ -89,12 +62,23 @@ class LoanRepaymentService
 
             DB::commit();
 
-            GlobalsHelper\funcReturnsData(true, $msg, [], 200);
+            return  GlobalsHelper\funcReturnsData(true, $msg, [], 200);
         } catch (\Exception $ex) {
             DB::rollback();
             Log::info($ex);
         }
 
-        GlobalsHelper\funcReturnsData(false, $ex->getMessage(), [], 400);
+        return  GlobalsHelper\funcReturnsData(false, $ex->getMessage(), [], 400);
+    }
+
+    public function getEmiSchedule(int $loanId): Collect
+    {
+        $emiRecords = $this->loanRepaymentRepo->getSchedule($loanId);
+
+        if ($emiRecords->isEmpty()) {
+            return  GlobalsHelper\funcReturnsData(false, 'Emi Schedule Not Created', [], 400);
+        }
+
+        return  GlobalsHelper\funcReturnsData(true, 'EMI Schedule Found', $emiRecords->all(), 200);
     }
 }

@@ -6,6 +6,7 @@ use App\Helpers\GlobalsHelper;
 use Repository\LoanRepository;
 use Repository\RepaymentRepository;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection as Collect;
 use DB;
 use Config;
 
@@ -21,7 +22,7 @@ class LoanService
         $this->loanRepayment = $loanRepayment;
     }
 
-    public function process(Request $a)
+    public function process($a): Collect
     {
 
         DB::beginTransaction();
@@ -31,15 +32,9 @@ class LoanService
             $insertData = [
                 'loan_amount' => $a->loan_amount,
                 'loan_tenure' => $a->loan_tenure,
+                'user_id' => $a->user_id,
                 'created_at' => now()
             ];
-
-            //put the loan in the table and generate the repayment scedule in weekly basis.
-
-            //create one user table too.
-
-
-            $returnData = $this->tokenRepo->insert($insertData);
 
             $currentDate =  strtotime(date('Y-m-d'));
 
@@ -49,14 +44,18 @@ class LoanService
 
             $emiAmount = ($a->loan_amount / ($a->loan_tenure * 4));
 
+            $insertData['emi_amount'] = $emiAmount;
+            
+            $returnData = $this->tokenRepo->insert($insertData);
+
             for ($i = 0; $i < ($a->loan_tenure * 4); $i++) {
 
                 $inc = 7;
 
                 $emiScheduleData[] = [
                     'emi_amount' => $emiAmount,
-                    'emi_date' => date('Y-m-d', strtotime("+" + $inc + " days", $startDate))
-
+                    'emi_date' => date('Y-m-d', strtotime("+" + $inc + " days", $startDate)),
+                    'loan_id' => $returnData['id']
                 ];
 
                 $inc = $inc + 7;
@@ -64,15 +63,14 @@ class LoanService
 
             $this->loanRepayment->insert($emiScheduleData);
 
-
             DB::commit();
 
-            GlobalsHelper\funcReturnsData(true, "successful", ['id' => $returnData], 200);
+            return  GlobalsHelper\funcReturnsData(true, "successful", ['id' => $returnData['id']], 200);
         } catch (\Exception $ex) {
 
             DB::rollback();
             Log::info($ex);
-            GlobalsHelper\funcReturnsData(false, "error", ['error' => $ex->getMessage()], 400);
+            return GlobalsHelper\funcReturnsData(false, "error", ['error' => $ex->getMessage()], 400);
         }
     }
 }

@@ -20,6 +20,6 @@ Route::post('/loanAppFirstStep', 'MainController@firstStep');
 Route::prefix('/')->middleware(['LoanAuthCheck'])->group(function () {
 
     Route::post('/loanAppSecondStep', 'MainController@secondStep');
-    Route::post('/loanAppRepaymentStep', 'MainController@repayamentSchedule');
+    Route::post('/loanAppRepaymentStep', 'MainController@processEmi');
     Route::get('/loanAppViewRepaymentStep', 'MainController@repayamentSchedule');
 });

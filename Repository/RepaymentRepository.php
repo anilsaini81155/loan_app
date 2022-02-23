@@ -14,4 +14,8 @@ class RepaymentRepository  extends BaseRepository
         parent::__construct($model);
     }
 
+    public function getSchedule(int $loan_id)
+    {
+        return  $this->model->where('loan_id', $loan_id)->get();
+    }
 }
