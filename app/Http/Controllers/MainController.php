@@ -6,7 +6,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Helpers\GlobalsHelper;
-use Services;
+use App\Http\Services as Services;
 
 class MainController
 {
@@ -32,7 +32,7 @@ class MainController
      */
 
     public function firstStep(Requests\FirstStepRequest $a)
-    {
+    {   
         $returnData = $this->tokenService->process($a);
         GlobalsHelper\putsResponse($returnData['status'], $returnData['msg'], $returnData['data'], $returnData['code']);
     }

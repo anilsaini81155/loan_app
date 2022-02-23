@@ -1,10 +1,10 @@
 <?php
 
-namespace Services;
+namespace App\Http\Services;
 
 use App\Helpers\GlobalsHelper;
-use Repository\TokenRepository;
-use Repository\UserRepository;
+use App\Http\Repository\TokenRepository;
+use App\Http\Repository\UserRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection as Collect;
 use DB;

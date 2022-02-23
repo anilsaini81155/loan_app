@@ -13,8 +13,6 @@ use Illuminate\Http\Request;
 |
 */
 
-
-
 Route::post('/loanAppFirstStep', 'MainController@firstStep');
 
 Route::prefix('/')->middleware(['LoanAuthCheck'])->group(function () {

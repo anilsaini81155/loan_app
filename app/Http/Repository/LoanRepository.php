@@ -1,10 +1,12 @@
 <?php
 
-namespace Repository;
+namespace App\Http\Repository;
+
 use App\Models\Loan;
 
 
-class TokenRepository  extends BaseRepository{
+
+class LoanRepository  extends BaseRepository{
 
     public function __construct(Loan $model) {
         parent::__construct($model);

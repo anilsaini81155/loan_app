@@ -1,10 +1,10 @@
 <?php
 
-namespace Services;
+namespace App\Http\Services;
 
 use App\Helpers\GlobalsHelper;
-use Repository\LoanRepository;
-use Repository\RepaymentRepository;
+use App\Http\Repository\LoanRepository;
+use App\Http\Repository\RepaymentRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection as Collect;
 use DB;
