@@ -8,7 +8,7 @@ use App\Models;
 use Closure;
 
 
-class LoamAuthCheck
+class LoanAuthCheck
 {
     /**
      * Handle an incoming request.
