@@ -22,7 +22,7 @@ class BaseRepository
     public function insert(array $data)
     {
 
-        $result = $this->model->insert($data);
+        return  $this->model->insert($data);
     }
 
     public function select(int $id)

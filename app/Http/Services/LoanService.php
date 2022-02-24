@@ -38,23 +38,25 @@ class LoanService
 
             $currentDate =  strtotime(date('Y-m-d'));
 
-            $startDate = date('Y-m-d', strtotime("+1 days", $currentDate));
+            $startDate = date('Y-m-d', strtotime("+8 days", $currentDate));
 
-            $startEmiDate = date('Y-m-d', strtotime("+7 days", $startDate));
+            $startDate = strtotime($startDate);
+            
+            // $startEmiDate = date('Y-m-d', strtotime("+7 days", $startDate));
 
             $emiAmount = ($a->loan_amount / ($a->loan_tenure * 4));
 
             $insertData['emi_amount'] = $emiAmount;
             
-            $returnData = $this->tokenRepo->insert($insertData);
-
+            $returnData = $this->loanRepo->create($insertData);
+            
             for ($i = 0; $i < ($a->loan_tenure * 4); $i++) {
 
                 $inc = 7;
-
+                
                 $emiScheduleData[] = [
                     'emi_amount' => $emiAmount,
-                    'emi_date' => date('Y-m-d', strtotime("+" + $inc + " days", $startDate)),
+                    'emi_date' => date('Y-m-d', strtotime("+{$inc}   days", $startDate)),
                     'loan_id' => $returnData['id']
                 ];
 
@@ -65,9 +67,9 @@ class LoanService
 
             DB::commit();
 
-            return  GlobalsHelper\funcReturnsData(true, "successful", ['id' => $returnData['id']], 200);
+            return  GlobalsHelper\funcReturnsData(true, "Loan is generated.", ['id' => $returnData['id']], 200);
         } catch (\Exception $ex) {
-
+            
             DB::rollback();
             Log::info($ex);
             return GlobalsHelper\funcReturnsData(false, "error", ['error' => $ex->getMessage()], 400);

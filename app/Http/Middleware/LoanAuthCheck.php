@@ -31,7 +31,7 @@ class LoanAuthCheck
         $diffTime = $lastTime->diff(new \DateTime($sysData->created_at));
 
         if ($diffTime->i >  config('commonconfig.timeoutInMins')) {
-            return GlobalsHelper\putsResponse(false, "Token TimeOut", [], 400);
+            return GlobalsHelper\putsResponse(false, "Token TimeOut , Please follow step1", [], 400);
         }
 
         $sysData = \App\Models\User::where(['mobile_no' => $sysData->mobile_no, 'name' => $sysData->name])

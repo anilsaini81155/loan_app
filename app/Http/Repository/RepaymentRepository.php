@@ -2,14 +2,14 @@
 
 namespace App\Http\Repository;
 
-use App\Models\Loan;
+use App\Models\Repayment;
 
 
 
 class RepaymentRepository  extends BaseRepository
 {
 
-    public function __construct(Loan $model)
+    public function __construct(Repayment $model)
     {
         parent::__construct($model);
     }

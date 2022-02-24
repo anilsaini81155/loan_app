@@ -37,13 +37,11 @@ CREATE TABLE `loan` (
    `user_id` int(11) NOT NULL,
    `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
-   PRIMARY KEY (`id`),
-   KEY `user_id` (`user_id`),
-   CONSTRAINT `user_2` FOREIGN KEY (`user_id`) REFERENCES `los_application` (`id`) ON DELETE CASCADE
+   PRIMARY KEY (`id`)   
 )ENGINE=InnoDB  DEFAULT CHARSET=latin1;
 
 #emi_table
-CREATE TABLE `emi` (
+CREATE TABLE `repayment` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `emi_amount` float(12,4) DEFAULT NULL,
   `emi_date` date NOT NULL,
@@ -51,7 +49,5 @@ CREATE TABLE `emi` (
    `loan_id` int(11) NOT NULL,
    `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
-   PRIMARY KEY (`id`),
-   KEY `loan_id` (`loan_id`),
-   CONSTRAINT `loan_id_2` FOREIGN KEY (`loan_id`) REFERENCES `loan` (`id`) ON DELETE CASCADE
+   PRIMARY KEY (`id`)
 )ENGINE=InnoDB  DEFAULT CHARSET=latin1;
