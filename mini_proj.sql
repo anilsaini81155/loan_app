@@ -8,10 +8,11 @@ CREATE TABLE `token` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(100) DEFAULT NULL,
   `mobile_no` varchar(15) NOT NULL,
-   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
-   PRIMARY KEY (`id`)
-)ENGINE=InnoDB  DEFAULT CHARSET=latin1;
+  `token` varchar(250) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
 #user_table

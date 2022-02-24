@@ -2,8 +2,10 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Request;
 
-class FirstStepRequest{
+class FirstStepRequest extends FormRequest{
 
      /**
      * Get the validation rules that apply to the request.
@@ -13,8 +15,7 @@ class FirstStepRequest{
     {
         return [
             "mobile_no" => "required|numeric",
-            "name" => "required|numeric",
-            
+            "name" => "required"
         ];
     }
 
@@ -28,6 +29,12 @@ class FirstStepRequest{
         return [
             
         ];
+    }
+
+
+    public function authorize()
+    {
+        return true;
     }
 
 }

@@ -2,8 +2,9 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Foundation\Http\FormRequest;
 
-class PayEmiRequest
+class PayEmiRequest  extends FormRequest
 {
 
     /**

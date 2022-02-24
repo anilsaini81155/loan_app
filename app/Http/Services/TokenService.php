@@ -24,7 +24,7 @@ class TokenService
     }
 
     public function process($a): Collect
-    {
+    {   
         DB::beginTransaction();
 
         try {

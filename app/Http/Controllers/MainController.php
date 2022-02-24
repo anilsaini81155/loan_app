@@ -33,8 +33,9 @@ class MainController
 
     public function firstStep(Requests\FirstStepRequest $a)
     {   
+    
         $returnData = $this->tokenService->process($a);
-        GlobalsHelper\putsResponse($returnData['status'], $returnData['message'], $returnData['data'], $returnData['code']);
+        return GlobalsHelper\putsResponse($returnData['status'], $returnData['message'], $returnData['data'], $returnData['code']);
     }
 
     /**
@@ -45,7 +46,7 @@ class MainController
     public function secondStep(Requests\SecondStepRequest $a)
     {
         $returnData = $this->loanService->process($a);
-        GlobalsHelper\putsResponse($returnData['status'], $returnData['message'], $returnData['data'], $returnData['code']);
+        return  GlobalsHelper\putsResponse($returnData['status'], $returnData['message'], $returnData['data'], $returnData['code']);
     }
 
     /**
@@ -56,7 +57,7 @@ class MainController
     public function processEmi(Requests\PayEmiRequest $a)
     {
         $returnData = $this->repyamentService->payEmi($a->emi_id, $a->emi_amount);
-        GlobalsHelper\putsResponse($returnData['status'], $returnData['message'], $returnData['data'], $returnData['code']);
+        return GlobalsHelper\putsResponse($returnData['status'], $returnData['message'], $returnData['data'], $returnData['code']);
     }
 
 
@@ -68,6 +69,6 @@ class MainController
     public function repayamentSchedule(Requests\GetEmiScheduleRequest $a)
     {
         $returnData = $this->repyamentService->getEmiSchedule($a->loan_id);
-        GlobalsHelper\putsResponse($returnData['status'], $returnData['message'], $returnData['data'], $returnData['code']);
+        return  GlobalsHelper\putsResponse($returnData['status'], $returnData['message'], $returnData['data'], $returnData['code']);
     }
 }
