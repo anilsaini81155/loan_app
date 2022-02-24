@@ -28,4 +28,10 @@ class PayEmiRequest  extends FormRequest
     {
         return [];
     }
+
+
+    public function authorize()
+    {
+        return true;
+    }
 }

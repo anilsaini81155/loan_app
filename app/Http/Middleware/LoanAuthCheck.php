@@ -22,7 +22,7 @@ class LoanAuthCheck
 
         $sysData = \App\Models\Token::where('token', $request['token'])
             ->first();
-
+        
         if ($sysData === false) {
             return GlobalsHelper\putsResponse(false, "Invalid Token Provided", [], 400);
         }
@@ -36,9 +36,9 @@ class LoanAuthCheck
 
         $sysData = \App\Models\User::where(['mobile_no' => $sysData->mobile_no, 'name' => $sysData->name])
             ->first();
-
+        
         $request->merge(['user_id' => $sysData->id]);
-
+        
         return $next($request);
     }
 }
